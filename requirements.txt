@@ -22,7 +22,6 @@ numpy==1.21.6
 packaging==21.3
 pandas==1.1.5
 parso==0.8.3
-phishing-domain-detection==0.0.3
 pickleshare==0.7.5
 pip==22.1.2
 prompt-toolkit==3.0.30
