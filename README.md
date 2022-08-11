@@ -11,3 +11,9 @@ The aim of this project is to detect phishing domains with the help of Machine L
  Before Model Building: get best threshold (work on False Negatives), See effects of clustering
 
  Model Building: Check with different models
+
+'''
+API Key: 0dd1a7a6-c735-4199-a21c-f562da4a64c2
+APP name: phishing-domain-detection-rach
+EMAIL: rachindersingh@gmail.com
+'''
