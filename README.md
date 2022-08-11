@@ -15,3 +15,7 @@ The aim of this project is to detect phishing domains with the help of Machine L
 
 ### To install setup.py
 python setup.py install
+
+
+### To stop all jupyter notebooks
+jupyter-notebook stop
