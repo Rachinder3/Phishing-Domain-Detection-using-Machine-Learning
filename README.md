@@ -12,3 +12,6 @@ The aim of this project is to detect phishing domains with the help of Machine L
 
  Model Building: Check with different models
 
+
+### To install setup.py
+python setup.py install
