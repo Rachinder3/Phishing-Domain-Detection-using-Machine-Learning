@@ -41,3 +41,5 @@ Werkzeug==2.2.2
 wheel==0.37.1
 wincertstore==0.2
 zipp==3.8.1
+pyaml
+sklearn
