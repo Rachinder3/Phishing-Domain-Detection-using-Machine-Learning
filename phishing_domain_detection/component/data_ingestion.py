@@ -185,6 +185,14 @@ class DataIngestion:
             raise Phishing_Exception(e,sys) from e    
     
     def initiate_data_ingestion(self)-> DataIngestionArtifact:
+        """
+
+        Raises:
+            Phishing_Exception: _description_
+
+        Returns:
+            DataIngestionArtifact: _description_
+        """
         try:
             ingested_df = self.read_data_from_db()
             return self.split_data_as_train_test(ingested_df=ingested_df)
