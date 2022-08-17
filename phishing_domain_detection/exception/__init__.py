@@ -27,9 +27,12 @@ class Phishing_Exception(Exception):
         """
         _,_, exec_tb = error_details.exc_info() # returns type, value, traceback, Return information about the most recent exception caught by an except clause in the current stack frame or in an older stack frame.
         
-        line_number = exec_tb.tb_frame.f_lineno
+        exception_block_line_number = exec_tb.tb_frame.f_lineno
+        try_block_line_number = exec_tb.tb_lineno
+        
         file_name = exec_tb.tb_frame.f_code.co_filename
-        error_message = f"Error occured in script: [{file_name}] at line number: [{line_number}] error message: [{error_message}]"
+        
+        error_message = f"Error occured in script: [ {file_name} ] at try block line number: [ {try_block_line_number} ] at exception block line number: [ {exception_block_line_number} ] error message: [{error_message}]"
         
         return error_message
     

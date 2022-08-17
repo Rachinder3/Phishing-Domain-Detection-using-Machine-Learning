@@ -156,6 +156,7 @@ class DataIngestion:
                 table_name
             )
             
+            
             testing_file_path = os.path.join(
                 self.data_ingestion_config.ingested_test_dir,
                 table_name
@@ -164,13 +165,13 @@ class DataIngestion:
             
             if strat_train_set is not None:
                 os.makedirs(self.data_ingestion_config.ingested_train_dir, exist_ok=True)
-                logging.info(f"Exporting training dataset to file: {training_file_path}.csv")
-                strat_train_set.to_csv(training_file_path+".csv", index= False)
+                logging.info(f"Exporting training dataset to file: {training_file_path}")
+                strat_train_set.to_csv(training_file_path, index= False)
             
             if strat_test_set is not None:
                 os.makedirs(self.data_ingestion_config.ingested_test_dir, exist_ok=True)
-                logging.info(f"Exporting test data to file : {testing_file_path}.csv")
-                strat_test_set.to_csv(testing_file_path+".csv", index = False)
+                logging.info(f"Exporting test data to file : {testing_file_path}")
+                strat_test_set.to_csv(testing_file_path, index = False)
         
             data_ingestion_artifact = DataIngestionArtifact(
             train_file_path=training_file_path,

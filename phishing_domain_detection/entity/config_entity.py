@@ -3,7 +3,7 @@ from collections import namedtuple
 DataIngestionConfig = namedtuple("DataIngestionConfig",
      ['dataset_dir','dataset_name','table_name','top_features','ingested_train_dir','ingested_test_dir'])
 
-DataValidationConfig = namedtuple("DataValidationConfig", ['schema_file_path'])
+DataValidationConfig = namedtuple("DataValidationConfig", ['schema_file_path', 'report_file_path','report_page_file_path'])
 
 DataTransformationConfig = namedtuple('DataTransformationConfig',['use_box_cox_transformation',
                                                                   'transformed_train_dir',
