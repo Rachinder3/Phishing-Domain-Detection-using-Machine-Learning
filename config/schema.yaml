@@ -27,5 +27,6 @@ columns:
   time_domain_activation: int64
 
 target_column: phishing
+target_column_type: int64
 
 

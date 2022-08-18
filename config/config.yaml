@@ -24,6 +24,8 @@ data_validation_config:
   schema_file_name: schema.yaml
   report_file_name: report.json
   report_page_file_name: report.html 
+  
+
 
 data_transformation_config:
   use_box_cox_transformation: false

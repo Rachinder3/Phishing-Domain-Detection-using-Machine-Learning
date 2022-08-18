@@ -146,7 +146,53 @@ class Configuration:
             raise Phishing_Exception(e,sys) from e            
     
     def get_data_transformation_config(self) -> DataTransformationConfig:
-        pass
+        try:
+            
+            data_transformation_config = self.config_info[DATA_TRANSFORMATION_CONFIG_KEY]
+            
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            
+            data_transformation_artifact_dir = os.path.join(
+                artifact_dir,
+                DATA_TRANSFORMATION_ARTIFACT_DIR_NAME,
+                CURRENT_TIME_STAMP
+            )
+            
+            use_box_transformation = data_transformation_config[DATA_TRANSFORMATION_USE_BOX_COX_KEY]
+            
+            transformed_train_dir = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY]
+            )
+            
+            transformed_test_dir = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY]
+            )
+            
+            preprocessed_object_file_path = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_OBJECT_FILE_NAME_KEY]
+            )
+            
+            data_transformation_config = DataTransformationConfig(
+                use_box_cox_transformation=use_box_transformation,
+                transformed_train_dir=transformed_train_dir,
+                transformed_test_dir=transformed_test_dir,
+                preprocessed_object_file_path=preprocessed_object_file_path
+                
+            )
+            
+            logging.info(f"Data Transformation config : {data_transformation_config}")
+            
+            return data_transformation_config
+        
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
+    
     
     def get_model_trainer_config(self) -> ModelTrainerConfig:
         pass

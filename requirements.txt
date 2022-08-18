@@ -44,3 +44,5 @@ zipp==3.8.1
 pyaml
 sklearn
 evidently
+pylab-sdk
+joblib

@@ -5,10 +5,11 @@ from phishing_domain_detection.logger import logging
 from phishing_domain_detection.exception import Phishing_Exception
 
 from phishing_domain_detection.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
-from phishing_domain_detection.entity.config_entity import DataIngestionConfig
+
 
 from phishing_domain_detection.component.data_ingestion import DataIngestion
 from phishing_domain_detection.component.data_validation import DataValidation
+from phishing_domain_detection.component.data_transformation import DataTransformation
 import os,sys
 
 
@@ -35,8 +36,18 @@ class Pipeline:
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
     
-    def start_data_transformation(self):
-        pass
+    def start_data_transformation(self,data_ingestion_artifact: DataIngestionArtifact, data_validation_artifact: DataValidationArtifact):
+        try:
+            data_transformation = DataTransformation(
+                data_transformation_config=self.config.get_data_transformation_config(),
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
+            
+            data_transformation.initialize_data_transformation()
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
+        
     
     def start_model_trainer(self):
         pass
@@ -49,6 +60,7 @@ class Pipeline:
             ## Data Ingestion
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(data_ingestion_artifact=data_ingestion_artifact, data_validation_artifact= data_validation_artifact)
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
             
