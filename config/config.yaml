@@ -39,6 +39,7 @@ data_transformation_config:
 model_trainer_config:
   trained_model_dir: trained_model
   model_file_name: model.joblib
+  scoring_parameter_for_grid_search_cv: "recall"
   base_recall: 0.9
   base_precision: 0.8
 

@@ -1,0 +1,29 @@
+grid_search:
+  class: GridSearchCV
+  module: sklearn.model_selection
+  params:
+    cv: 3
+    verbose: 10
+model_selection:
+  module_0:
+    class: LogisticRegression
+    module: sklearn.linear_model
+    params:
+      fit_intecept: false
+    search_param_grid:
+      fit_intercept:
+      - true
+      - false
+
+  module_1:
+    class: RandomForestClassifier
+    module: sklearn.ensemble
+    params:
+      n_estimators: 100
+    search_param_grid:
+      n_estimators:
+      - 10
+      - 100
+      - 200
+
+custom_threshold : 0.225  # make sure to change this to int
