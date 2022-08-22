@@ -56,3 +56,15 @@ BOX_COX_FEATURES = ['length_url']
 SCHEMA_COLUMNS_KEY = "columns"
 SCHEMA_TARGET_COLUMN_KEY = "target_column"
 SCHEMA_TARGET_COLUMN_TYPE_KEY = "target_column_type"
+
+## Model Trainer Related Variables
+MODEL_TRAINER_CONFIG_KEY = "model_trainer_config"
+MODEL_TRAINER_ARTIFACT_DIR = "model_trainer"
+MODEL_TRAINER_TRAINED_MODEL_DIR_KEY = "trained_model_dir"
+MODEL_TRAINER_MODEL_FILE_NAME_KEY = "model_file_name"
+MODEL_TRAINER_SCORING_PARAMETER_FOR_GRID_SEARCH_CV_KEY = "scoring_parameter_for_grid_search_cv"
+MODEL_TRAINER_BASE_RECALL_KEY = "base_recall"
+MODEL_TRAINER_BASE_PRECISION_KEY =  "base_precision"
+MODEL_TRAINER_MODEL_CONFIG_DIR_KEY = "model_config_dir"
+MODEL_TRAINER_MODEL_CONFIG_FILE_NAME_KEY = "model_config_file_name"
+MODEL_TRAINER_CUSTOM_THRESHOLD = "custom_threshold"

@@ -42,6 +42,9 @@ model_trainer_config:
   scoring_parameter_for_grid_search_cv: "recall"
   base_recall: 0.9
   base_precision: 0.8
+  model_config_dir: config
+  model_config_file_name: model.yaml
+  custom_threshold: 0.225
 
 model_evaluation_config:
   model_evaluation_file_name: model_evaluation.yaml

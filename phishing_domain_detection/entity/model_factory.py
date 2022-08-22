@@ -16,7 +16,7 @@ from collections import namedtuple
 
 from phishing_domain_detection.logger import logging
 
-from sklearn.metrics import accuracy_score, recall_score, precision_score
+from sklearn.metrics import f1_score, recall_score, precision_score
 
 GRID_SEARCH_KEY = 'grid_search'
 
@@ -49,6 +49,89 @@ BestModel = namedtuple("BestModel",["model_serial_number",
                                                         "best_paramters",
                                                         "best_score"])
 
+MetricInfoArtifact = namedtuple("MetricInfoArtifact",["model_name", "model_object","train_recall", "test_recall","train_precision","test_precision", "model_f1","index_number"])
+
+def evaluate_classification_report(model_list, custom_threshold,X_train: np.array, y_train:np.array, X_test: np.array, y_test: np.array, base_precision= 0.8, base_recall: float = 0.9):
+    try:
+        index_number = 0
+        metric_info_artifact = None
+        
+        for model in model_list:
+            model_name = str(model) ## Getting name of model from model object
+            logging.info(f"{'>>'*30} Starting evaludation model: [ {type(model).__name__} ] {'>>'*30}")
+            
+            ## Getting predictions on training and testing dataset 
+            ##### Training data
+            y_train_pred_probabilities = model.predict_proba(X_train)[:,1]
+            y_train_pred =  np.where(y_train_pred_probabilities > custom_threshold, 1, 0)
+                    
+            
+            ##### Testing Data
+            y_test_pred_probabilities = model.predict_proba(X_test)[:,1]
+            y_test_pred = np.where(y_test_pred_probabilities > custom_threshold,1,0)
+            
+            
+            ##### Calculating precision on training data and testing data  
+            train_precision = precision_score(y_true = y_train, y_pred = y_train_pred)
+            test_precision = precision_score(y_true=y_test, y_pred=y_test_pred)
+            avg_precision = (2 * (train_precision*test_precision)) / (train_precision * test_precision)
+            
+            ##### Calculating recall on training data and testing data
+            train_recall = recall_score(y_true = y_train, y_pred = y_train_pred)
+            test_recall = recall_score(y_true=y_test, y_pred=y_test_pred)
+            avg_recall = (2 * (train_recall*test_recall)) / (train_recall * test_recall)
+            
+            ##### Calculating f1 score on training data and testing data
+            train_f1 = f1_score(y_true = y_train, y_pred = y_train_pred)
+            test_f1 =  f1_score(y_true=y_test, y_pred=y_test_pred)
+            avg_f1 = (2 * (train_f1*test_f1)) / (train_f1 * test_f1)
+            
+            ##### difference of f1 scores to check overfitting
+            
+            diff_test_train_f1 = abs(test_f1 - train_f1)
+            
+            #### logging all important metrics
+            logging.info(f"{'>>'*30} Score {'<<'*30}")
+            logging.info(f"Criteria\t\tTrain Score\t\t Test Score\t\t Avergae Score\t\t")
+            logging.info(f"Recall\t\t{train_recall}\t\t {test_recall}\t\t{avg_recall}")
+            logging.info(f"Precision\t\t{train_precision}\t\t {test_precision}\t\t{avg_precision}")
+            logging.info(f"F1 score\t\t{train_f1}\t\t {test_f1}\t\t{avg_f1}")
+            
+            
+            
+            
+            ## We accept a model if it has some threshold recall and  precion.
+            ## Also, we check that difference b/w testing and training f1 score is less than a threshold so that we ensure, we are not overfitting
+            
+            
+            # print(train_recall,train_precision,test_recall,test_precision)
+            if avg_recall >= base_recall and avg_precision >= base_precision and diff_test_train_f1 < 0.1:
+                base_recall = avg_recall ## More interested in increasing recall, precision needs to be atleast equal to base precision
+                metric_info_artifact = MetricInfoArtifact(
+                    model_name=model_name,
+                    model_object=model,
+                    train_recall=train_recall,
+                    test_recall=test_recall,
+                    train_precision=train_precision,
+                    test_precision = test_precision,
+                    model_f1= avg_f1,
+                    index_number= index_number
+                )
+                
+                # print(metric_info_artifact)
+                logging.info(f"Acceptable model found: {metric_info_artifact}")
+                
+                
+            index_number += 1
+        
+        if   metric_info_artifact is None:
+            logging.info(f"No model with higher recall than  : {base_recall} or no model with higher precision : {base_precision} or the model overfits because difference b/w train and test f1 scores is greater than {0.5}")  
+        
+        return metric_info_artifact    
+    except Exception as e:
+        raise Phishing_Exception(e,sys) from e
+
+
 def get_sample_model_config_yaml_file(export_dir: str):
     """Generates a sample model file. This will help us to do Hyperparamater tuning and get the best model.
 
@@ -80,8 +163,7 @@ def get_sample_model_config_yaml_file(export_dir: str):
                         "param_name":['param_value_1','param_value_2']
                     }
                 },
-            },
-            "custom_threshold": 0.5
+            }
             
         }
         

@@ -3,7 +3,7 @@ grid_search:
   module: sklearn.model_selection
   params:
     cv: 3
-    verbose: 10
+    verbose: 2
 model_selection:
   module_0:
     class: LogisticRegression
@@ -19,11 +19,12 @@ model_selection:
     class: RandomForestClassifier
     module: sklearn.ensemble
     params:
-      n_estimators: 100
+      n_estimators: 500
+      max_features: log2
+      min_samples_split: 6
     search_param_grid:
       n_estimators:
       - 10
       - 100
       - 200
 
-custom_threshold : 0.225  # make sure to change this to int

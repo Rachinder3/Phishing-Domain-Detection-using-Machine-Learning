@@ -10,9 +10,9 @@ DataTransformationConfig = namedtuple('DataTransformationConfig',['use_box_cox_t
                                                                   'transformed_test_dir',
                                                                   'preprocessed_object_file_path'])
 
-ModelTrainerConfig = namedtuple("ModelTrainerConfig", ['trained_model_file_path', 'scoring_parameter_for_grid_search_cv'
+ModelTrainerConfig = namedtuple("ModelTrainerConfig", ['trained_model_file_path', 'scoring_parameter_for_grid_search_cv',
                                                        'base_recall',
-                                                       'base_precision'])
+                                                       'base_precision', 'model_config_file_path', 'custom_threshold'])
 
 ModelEvaluationConfig  = namedtuple("ModelEvaluationConfig",["model_evaluation_file_path","time_stamp"])
 

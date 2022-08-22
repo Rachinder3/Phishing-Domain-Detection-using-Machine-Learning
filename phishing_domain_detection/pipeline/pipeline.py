@@ -1,15 +1,17 @@
 import sys
 from tkinter import E
+from phishing_domain_detection.component.model_trainer import ModelTrainer
 from phishing_domain_detection.config.configuration import Configuration
 from phishing_domain_detection.logger import logging
 from phishing_domain_detection.exception import Phishing_Exception
 
-from phishing_domain_detection.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+from phishing_domain_detection.entity.artifact_entity import DataIngestionArtifact, DataTransformationArtifact, DataValidationArtifact, ModelTrainerArtifact
 
 
 from phishing_domain_detection.component.data_ingestion import DataIngestion
 from phishing_domain_detection.component.data_validation import DataValidation
 from phishing_domain_detection.component.data_transformation import DataTransformation
+from phishing_domain_detection.component.model_trainer import ModelTrainer
 import os,sys
 
 
@@ -44,13 +46,18 @@ class Pipeline:
                 data_validation_artifact=data_validation_artifact
             )
             
-            data_transformation.initialize_data_transformation()
+            return data_transformation.initialize_data_transformation()
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
         
     
-    def start_model_trainer(self):
-        pass
+    def start_model_trainer(self, data_transformation_artifact: DataTransformationArtifact) -> ModelTrainerArtifact:
+        try:
+            model_trainer = ModelTrainer(data_transformation_artifact=data_transformation_artifact, model_trainer_config=self.config.get_model_trainer_config())
+            
+            return model_trainer.initialize_model_trainer()
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
     
     def stat_model_evaluation(self):
         pass
@@ -61,6 +68,7 @@ class Pipeline:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
             data_transformation_artifact = self.start_data_transformation(data_ingestion_artifact=data_ingestion_artifact, data_validation_artifact= data_validation_artifact)
+            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
             
