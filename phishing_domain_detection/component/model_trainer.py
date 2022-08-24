@@ -24,6 +24,18 @@ class PhishingEstimator:
             raise Phishing_Exception(e,sys) from e
     
     def predict(self, X):
+        """Does predictions on the basis of custom threshold
+
+        Args:
+            X (_type_): Input Dataframe
+
+        Raises:
+            Phishing_Exception: Custom Exception
+
+        Returns:
+            _type_: Predictions
+        """
+        
         try:
             transformed_features = self.preprocessed_object.transform(X)
             
@@ -34,6 +46,31 @@ class PhishingEstimator:
             return predictions
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
+        
+        
+    def predict_proba(self,X):
+        """Returns probabilities instead of predictions
+
+        Args:
+            X (_type_): Input features
+
+        Raises:
+            Phishing_Exception: Custom Exception
+
+        Returns:
+            _type_: Predicted probabilities
+        """
+        try:
+            transformed_features = self.preprocessed_object.transform(X)
+            
+            prediction_probabilities = self.trained_model_object.predict_proba(transformed_features)
+            
+            return prediction_probabilities
+            
+            
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
+        
     def __repr__(self) -> str:
         return f"{type(self.trained_model_object).__name__}()"
     
@@ -114,7 +151,12 @@ class ModelTrainer:
                 test_recall=metric_info.test_recall,
                 train_precision=metric_info.train_precision,
                 test_precision=metric_info.test_precision,
-                model_f1=metric_info.model_f1
+                model_f1=metric_info.model_f1,
+                custom_threshold=self.model_trainer_config.custom_threshold,
+                model_recall= metric_info.model_recall,
+                model_precision= metric_info.model_precision,
+                base_recall= base_recall,
+                base_precision= base_precision
             )
             
             logging.info(f"Model Trainer Artifact: {model_trainer_artifact}")

@@ -9,6 +9,25 @@ from phishing_domain_detection.constants import *
 import joblib
 import numpy as np
 
+def write_yaml_file(file_path:str, data:dict = None):
+    """Writes dictionary into a yaml file
+
+    Args:
+        file_path (str): Path of the file
+        data (dict, optional): Data to be written into yaml file. Defaults to None.
+
+    Raises:
+        Phishing_Exception: Custom exception
+    """
+    try:
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        
+        with open(file_path, 'w') as yaml_file:
+            if data is not None:
+                yaml.dump(data, yaml_file)
+    except Exception as e:
+        raise Phishing_Exception(e,sys) from e
+
 def read_yaml_file(file_path:str)->dict:
     """Reads the yaml file for which path is provided
     and returns the dictionary representation of yaml file
@@ -50,7 +69,7 @@ def load_data(file_path: str, schema_file_path: str) -> pd.DataFrame:
         
         schema = dataset_schema[SCHEMA_COLUMNS_KEY]
         schema[dataset_schema[SCHEMA_TARGET_COLUMN_KEY]] = dataset_schema[SCHEMA_TARGET_COLUMN_TYPE_KEY] ## Adding Phishing key in the schema as well
-        print(schema)
+        #print(schema)
         
         dataframe = pd.read_csv(file_path)
         
@@ -135,3 +154,4 @@ def load_numpy_array_data(file_path: str) -> np.array:
             return np.load(file_obj)
     except Exception as e:
         raise Exception(e,sys) from e
+    

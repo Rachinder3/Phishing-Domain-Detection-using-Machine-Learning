@@ -49,7 +49,7 @@ BestModel = namedtuple("BestModel",["model_serial_number",
                                                         "best_paramters",
                                                         "best_score"])
 
-MetricInfoArtifact = namedtuple("MetricInfoArtifact",["model_name", "model_object","train_recall", "test_recall","train_precision","test_precision", "model_f1","index_number"])
+MetricInfoArtifact = namedtuple("MetricInfoArtifact",["model_name", "model_object","train_recall", "test_recall","train_precision","test_precision", "model_f1","index_number", "model_recall" , "model_precision"])
 
 def evaluate_classification_report(model_list, custom_threshold,X_train: np.array, y_train:np.array, X_test: np.array, y_test: np.array, base_precision= 0.8, base_recall: float = 0.9):
     try:
@@ -64,27 +64,27 @@ def evaluate_classification_report(model_list, custom_threshold,X_train: np.arra
             ##### Training data
             y_train_pred_probabilities = model.predict_proba(X_train)[:,1]
             y_train_pred =  np.where(y_train_pred_probabilities > custom_threshold, 1, 0)
-                    
-            
+            #y_train_pred = model.predict(X_train)   
+             
             ##### Testing Data
             y_test_pred_probabilities = model.predict_proba(X_test)[:,1]
             y_test_pred = np.where(y_test_pred_probabilities > custom_threshold,1,0)
-            
+            #y_test_pred = model.predict(X_test)   
             
             ##### Calculating precision on training data and testing data  
             train_precision = precision_score(y_true = y_train, y_pred = y_train_pred)
             test_precision = precision_score(y_true=y_test, y_pred=y_test_pred)
-            avg_precision = (2 * (train_precision*test_precision)) / (train_precision * test_precision)
+            avg_precision = (2 * (train_precision*test_precision)) / (train_precision + test_precision)
             
             ##### Calculating recall on training data and testing data
             train_recall = recall_score(y_true = y_train, y_pred = y_train_pred)
             test_recall = recall_score(y_true=y_test, y_pred=y_test_pred)
-            avg_recall = (2 * (train_recall*test_recall)) / (train_recall * test_recall)
+            avg_recall = (2 * (train_recall*test_recall)) / (train_recall + test_recall)
             
             ##### Calculating f1 score on training data and testing data
             train_f1 = f1_score(y_true = y_train, y_pred = y_train_pred)
             test_f1 =  f1_score(y_true=y_test, y_pred=y_test_pred)
-            avg_f1 = (2 * (train_f1*test_f1)) / (train_f1 * test_f1)
+            avg_f1 = (2 * (train_f1*test_f1)) / (train_f1 + test_f1)
             
             ##### difference of f1 scores to check overfitting
             
@@ -115,7 +115,9 @@ def evaluate_classification_report(model_list, custom_threshold,X_train: np.arra
                     train_precision=train_precision,
                     test_precision = test_precision,
                     model_f1= avg_f1,
-                    index_number= index_number
+                    index_number= index_number,
+                    model_recall= avg_recall,
+                    model_precision= avg_precision
                 )
                 
                 # print(metric_info_artifact)

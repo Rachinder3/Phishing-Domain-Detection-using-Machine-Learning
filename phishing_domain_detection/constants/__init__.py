@@ -68,3 +68,13 @@ MODEL_TRAINER_BASE_PRECISION_KEY =  "base_precision"
 MODEL_TRAINER_MODEL_CONFIG_DIR_KEY = "model_config_dir"
 MODEL_TRAINER_MODEL_CONFIG_FILE_NAME_KEY = "model_config_file_name"
 MODEL_TRAINER_CUSTOM_THRESHOLD = "custom_threshold"
+
+
+### Model Evaluation Related Keys
+MODEL_EVALUATION_CONFIG_KEY = "model_evaluation_config"
+MODEL_EVALUATION_CONFIG_ARTIFACT_DIR_KEY = "model_evaluation"
+MODEL_EVALUATION_FILE_NAME_KEY = "model_evaluation_file_name"
+
+BEST_MODEL_KEY = "best_model"
+HISTORY_KEY = "history"
+MODEL_PATH_KEY = "model_path"

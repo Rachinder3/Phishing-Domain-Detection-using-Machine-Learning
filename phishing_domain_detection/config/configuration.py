@@ -242,7 +242,29 @@ class Configuration:
             raise Phishing_Exception(e,sys) from e
     
     def get_model_evaluation_config(self) -> ModelEvaluationConfig:
-        pass
+        try:
+            
+            model_evaluation_config = self.config_info[MODEL_EVALUATION_CONFIG_KEY]
+            
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            
+            model_evalutaion_artifact_dir  = os.path.join(
+                artifact_dir,
+                
+                MODEL_EVALUATION_CONFIG_ARTIFACT_DIR_KEY
+            )
+            
+            model_evaluation_file_path = os.path.join(model_evalutaion_artifact_dir, model_evaluation_config[MODEL_EVALUATION_FILE_NAME_KEY])
+            
+            model_evaluation_config = ModelEvaluationConfig(
+                model_evaluation_file_path=model_evaluation_file_path,
+                time_stamp=CURRENT_TIME_STAMP
+            )
+            
+            logging.info(f"Model Evaluation Config : {model_evaluation_config}")
+            return model_evaluation_config
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
     
     def get_model_pusher_config(self) -> ModelExportConfig:
         pass
