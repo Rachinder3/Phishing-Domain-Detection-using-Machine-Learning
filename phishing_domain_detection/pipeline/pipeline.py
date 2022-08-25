@@ -1,5 +1,5 @@
 import sys
-from tkinter import E
+from tkinter import E, PROJECTING
 from phishing_domain_detection.component.model_trainer import ModelTrainer
 from phishing_domain_detection.config.configuration import Configuration
 from phishing_domain_detection.logger import logging
@@ -13,6 +13,7 @@ from phishing_domain_detection.component.data_validation import DataValidation
 from phishing_domain_detection.component.data_transformation import DataTransformation
 from phishing_domain_detection.component.model_trainer import ModelTrainer
 from phishing_domain_detection.component.model_evaluation import ModelEvaluation
+from phishing_domain_detection.component.model_pusher import ModelPusher
 import os,sys
 
 
@@ -75,8 +76,13 @@ class Pipeline:
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
     
-    def start_model_pusher(self):
-        pass
+    def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifact):
+        try:
+            model_pusher = ModelPusher(model_pusher_config=self.config.get_model_pusher_config(),
+                        model_evaluation_artifact=model_evaluation_artifact)
+            return model_pusher.initiate_model_pusher()
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
     
     def run_pipeline(self):
         try:
@@ -90,6 +96,9 @@ class Pipeline:
                 data_validation_artifact=data_validation_artifact,
                 model_trainer_artifact=model_trainer_artifact
             )
+            
+            model_pusher_artifact = self.start_model_pusher(model_evaluation_artifact=model_evaluation_artifact)
+            
             
         except Exception as e:
             raise Phishing_Exception(e,sys) from e

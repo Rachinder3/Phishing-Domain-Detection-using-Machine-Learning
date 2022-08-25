@@ -9,7 +9,7 @@ import os,sys
 from phishing_domain_detection.constants import *
 from phishing_domain_detection.exception import Phishing_Exception
 from phishing_domain_detection.logger import logging
-
+from datetime import datetime
 
 class Configuration:
     
@@ -266,8 +266,26 @@ class Configuration:
         except Exception as e:
             raise Phishing_Exception(e,sys) from e
     
-    def get_model_pusher_config(self) -> ModelExportConfig:
-        pass
+    def get_model_pusher_config(self) -> ModelPusherConfig:
+        try:
+            time_stamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        
+            model_pusher_Config_info = self.config_info[MODEL_PUSHER_CONFIG_KEY]
+            
+            export_dir_path = os.path.join(ROOT_DIR,
+                                           model_pusher_Config_info[MODEL_PUSHER_MODEL_EXPORT_DIR_KEY],
+                                           time_stamp)  ## Will create this in the root directory
+            
+            model_pusher_config = ModelPusherConfig(
+                export_dir_path=export_dir_path
+            )
+            
+            logging.info(f"Model Pusher Config: {model_pusher_config}")
+            
+            return model_pusher_config
+        
+        except Exception as e:
+            raise Phishing_Exception(e,sys) from e
     
     
     def get_training_pipeline_config(self) -> TrainingPipelineConfig:

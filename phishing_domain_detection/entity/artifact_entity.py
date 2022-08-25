@@ -32,3 +32,5 @@ ModelEvaluationArtifact = namedtuple("ModelEvaluationArtifact",[
     "evaluated_model_path"
 ])
 
+ModelPusherArtifact = namedtuple("ModelPusherArtifact",['is_model_pushed','export_model_file_path'])
+
