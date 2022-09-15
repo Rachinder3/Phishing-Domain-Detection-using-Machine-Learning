@@ -34,6 +34,8 @@ class ModelPusher:
             os.makedirs(export_dir,exist_ok=True)
             
             shutil.copy(src=evaluated_model_file_path, dst=exported_model_file_path) 
+            # Can push the model object into some cloud. boto3 library to be used. Can create 2 functions in utils,
+            # push into s3 bucket and fetch from s3 bucket.
                        
             logging.info(f"Trained model kept in : {evaluated_model_file_path} is copied to export dir: [ {exported_model_file_path} ] " )
             
