@@ -127,4 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Folders not to track
 phishing_domain_detection/artifacts
+saved_models/*
