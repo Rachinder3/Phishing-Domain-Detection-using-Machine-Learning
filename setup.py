@@ -9,6 +9,8 @@ PROJECT_AUTHOR_EMAIL = "rachindersingh@gmail.com"
 PROJECT_DESCRIPTION = "The project builds a smart system capable of detecting a particular domain as phishing or non phishing"
 PROJECT_PACKAGES = ["phishing_domain_detection"]
 REQUIREMENTS_FILE_NAME = "requirements.txt"
+HYPHEN_E_DOT = "-e ."
+
 
 ## Function to get all the requirements listed in requirements.txt
 def get_requirements_list() -> List[str]:
@@ -24,6 +26,8 @@ def get_requirements_list() -> List[str]:
     
     requirements_list = [requirement.replace("\n","") for requirement in requirements_list]
     
+    if HYPHEN_E_DOT in requirements_list:
+        requirements_list.remove(HYPHEN_E_DOT)
     return requirements_list
     
 
