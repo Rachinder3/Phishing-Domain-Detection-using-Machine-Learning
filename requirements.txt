@@ -47,4 +47,3 @@ evidently
 pylab-sdk
 joblib
 python-whois
--e .
