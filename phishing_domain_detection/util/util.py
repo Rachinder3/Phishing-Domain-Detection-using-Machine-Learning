@@ -155,3 +155,6 @@ def load_numpy_array_data(file_path: str) -> np.array:
     except Exception as e:
         raise Exception(e,sys) from e
     
+def check():
+    return "checking package install"
+
