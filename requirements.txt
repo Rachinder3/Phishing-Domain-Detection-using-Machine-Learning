@@ -46,3 +46,4 @@ sklearn
 evidently
 pylab-sdk
 joblib
+python-whois
