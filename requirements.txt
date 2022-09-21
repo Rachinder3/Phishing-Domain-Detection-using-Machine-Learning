@@ -47,4 +47,8 @@ evidently
 pylab-sdk
 joblib
 python-whois
+matplotlib
+seaborn
+xgboost
+
 -e .
