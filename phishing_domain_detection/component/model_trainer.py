@@ -39,9 +39,12 @@ class PhishingEstimator:
         try:
             transformed_features = self.preprocessed_object.transform(X)
             
-            prediction_probabilities = self.trained_model_object.predict_proba(transformed_features)[:,1]
+            prediction_probabilities = self.predict_proba(X)[:,1]
             
-            predictions = np.where(prediction_probabilities,1,0)
+
+            predictions = np.where(prediction_probabilities>self.custom_threshold,1,0)
+            
+            
             
             return predictions
         except Exception as e:
