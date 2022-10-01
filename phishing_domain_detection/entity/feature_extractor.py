@@ -6,6 +6,7 @@ import numpy as np
 import datetime 
 import whois
 
+## This script is responsible for generating datframe out of some raw url
 
 config  = read_yaml_file(CONFIG_FILE_PATH)
 features = config[DATA_INGESTION_CONFIG_KEY][DATA_INGESTION_TOP_FEATURES_KEY]
