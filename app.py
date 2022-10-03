@@ -13,9 +13,13 @@ import os,sys
 from phishing_domain_detection.util.util import check
 from phishing_domain_detection.entity.phishing_estimator import PhishingEstimator
 from phishing_domain_detection.pipeline.pipeline import Pipeline
-from phishing_domain_detection.constants import EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAME
+from phishing_domain_detection.constants import CONFIG_FILE_PATH, EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAME
+from phishing_domain_detection.constants import CONFIG_DIR
+from phishing_domain_detection.util.util import write_yaml_file, read_yaml_file
 
 import pandas as pd
+import ast
+
 # initializations
 app = Flask(__name__)
 
@@ -26,6 +30,10 @@ artifacts_folder = "artifacts"
 
 LOG_FOLDER_NAME = "phishing_logs"
 LOG_DIR = os.path.join(ROOT_DIR, LOG_FOLDER_NAME)
+
+MODEL_CONFIG_FILE_PATH = os.path.join(ROOT_DIR, CONFIG_DIR, "model.yaml")
+
+
 
 experiment_file_path = os.path.join(pipeline_folder,artifacts_folder, EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAME)
 rows_to_return = 5
@@ -283,7 +291,27 @@ def saved_models(req_path):
         print(exception.error_message)
     
 
-    
+@app.route('/update_model_config', methods=['GET','POST'])
+def update_model_config():
+    try:
+        if request.method == 'POST':
+            model_config = request.form['new_model_config']
+            model_config = model_config.replace("'", '"')
+            model_config = model_config.strip()
+            print(model_config)
+            
+            print(type(model_config))
+            model_config = ast.literal_eval(model_config) ## converting dictionary string to dictionary
+
+            write_yaml_file(file_path=MODEL_CONFIG_FILE_PATH, data = model_config)
+
+        model_config = read_yaml_file(file_path=MODEL_CONFIG_FILE_PATH)
+            
+        return render_template("update_model_config.html",  result = {"model_config":model_config})
+    except Exception as e:
+        exception = Phishing_Exception(e,sys)
+        print(exception.error_message)
+        
     
     
 if __name__=='__main__':

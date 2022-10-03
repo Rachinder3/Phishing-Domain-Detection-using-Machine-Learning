@@ -14,20 +14,18 @@ model_selection:
       fit_intercept:
       - true
       - false
-
   module_1:
     class: RandomForestClassifier
     module: sklearn.ensemble
     params:
-      n_estimators: 500
       max_features: log2
       min_samples_split: 6
+      n_estimators: 500
     search_param_grid:
       n_estimators:
       - 10
       - 100
       - 200
-    
   module_2:
     class: XGBRFClassifier
     module: xgboost
