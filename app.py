@@ -229,7 +229,7 @@ def render_log_dir(req_path):
         
         
         ## Getting directory contents
-        files = {os.path.join(abs_path,file): file for file in os.listdir(abs_path)}
+        files = {os.path.join(abs_path,file): file for file in os.listdir(abs_path)[::-1]}
         
         
         result = {
@@ -239,6 +239,44 @@ def render_log_dir(req_path):
         }
         
         return render_template("logs.html", result =result)
+        
+    except Exception as e:
+        exception = Phishing_Exception(e,sys)
+        print(exception.error_message)
+
+
+@app.route("/saved_models", defaults = {'req_path':f"{model_directory}"})
+@app.route("/saved_models/<path:req_path>")
+def saved_models(req_path):
+    try:
+        ### If no folder exists, create an empty model
+        os.makedirs("saved_models", exist_ok=True)
+        
+        ## Joining the base and requested path
+        print(f"requested_path:{req_path}")
+        
+        abs_path = os.path.join(req_path)
+        
+        print("abs_path")
+        
+        ## Return 404 if path doesn't exist
+        if not os.path.exists(abs_path):
+            return abort(404)
+        
+        ## Check if path is file and serve
+        if os.path.isfile(abs_path):
+            return send_file(abs_path)
+        
+        ## Show directory contents  
+        files = {os.path.join(abs_path,file):file for file in os.listdir(abs_path)[::-1]}
+        
+        result = {
+            "files": files,
+            "parent_folder": os.path.dirname(abs_path),
+            "parent_label": abs_path
+        }
+        
+        return render_template("saved_models.html",result = result)
         
     except Exception as e:
         exception = Phishing_Exception(e,sys)
