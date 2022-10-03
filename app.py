@@ -1,4 +1,5 @@
 
+from multiprocessing import context
 from pyexpat.errors import messages
 from flask import Flask, jsonify, request, render_template
 
@@ -26,7 +27,7 @@ experiment_file_path = os.path.join(pipeline_folder,artifacts_folder, EXPERIMENT
 rows_to_return = 5
 
 
-def generate_experiment_history_dict():
+def generate_experiment_history_df():
     try:
         #print(experiment_file_path)
         if not os.path.exists(experiment_file_path):
@@ -180,7 +181,7 @@ def train():
                 message = "Pipeline has been triggered."
                 context["message"] = message
             
-            context["experiment"] = generate_experiment_history_dict()
+            context["experiment"] = generate_experiment_history_df()
 
             return render_template("train.html", context = context)
         return render_template("train.html", context=context)
@@ -188,8 +189,20 @@ def train():
     except Exception as e:
         exception = Phishing_Exception(e,sys)
         print(exception.error_message)
+
+
+@app.route("/experiment_history", methods = ["GET","POST"])
+def experiment_history():
+    try:
+        context = dict()
         
-    
+        context["experiment"] = generate_experiment_history_df()
+        
+        return render_template("experiment_history.html", context = context)
+    except Exception as e:
+        exception = Phishing_Exception(e,sys)
+        print(exception.error_message)
+           
     
     
     
