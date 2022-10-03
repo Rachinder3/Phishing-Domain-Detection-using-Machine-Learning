@@ -1,8 +1,8 @@
 
+from genericpath import isfile
 from multiprocessing import context
 from pyexpat.errors import messages
-from flask import Flask, jsonify, request, render_template
-
+from flask import Flask, jsonify, request, render_template, send_file, abort
 
 import os, sys
 import json
@@ -19,14 +19,19 @@ import pandas as pd
 # initializations
 app = Flask(__name__)
 
+ROOT_DIR = os.getcwd()
 model_directory = "saved_models"
 pipeline_folder = "phishing_domain_detection"
 artifacts_folder = "artifacts"
+
+LOG_FOLDER_NAME = "phishing_logs"
+LOG_DIR = os.path.join(ROOT_DIR, LOG_FOLDER_NAME)
 
 experiment_file_path = os.path.join(pipeline_folder,artifacts_folder, EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAME)
 rows_to_return = 5
 
 
+## utility function
 def generate_experiment_history_df():
     try:
         #print(experiment_file_path)
@@ -204,7 +209,40 @@ def experiment_history():
         print(exception.error_message)
            
     
-    
+@app.route("/logs", defaults = {'req_path': f"{LOG_FOLDER_NAME}"})
+@app.route(f"/logs/<path:req_path>")
+def render_log_dir(req_path):
+    try:
+        os.makedirs(LOG_FOLDER_NAME, exist_ok=True)  ## If the log directory doesn't exist, this will create the directory
+        
+        print(f"req_path: {req_path}")
+        abs_path = os.path.join(req_path)
+        print(f"absolute path : {abs_path}")
+        
+        if not os.path.exists(abs_path):
+            return abort(404)
+        
+        
+        
+        if os.path.isfile(abs_path):
+            return send_file(abs_path)
+        
+        
+        ## Getting directory contents
+        files = {os.path.join(abs_path,file): file for file in os.listdir(abs_path)}
+        
+        
+        result = {
+            "files" : files,
+            "parent_folder": os.path.dirname(abs_path),
+            "parent_label": abs_path
+        }
+        
+        return render_template("logs.html", result =result)
+        
+    except Exception as e:
+        exception = Phishing_Exception(e,sys)
+        print(exception.error_message)
     
 
     
