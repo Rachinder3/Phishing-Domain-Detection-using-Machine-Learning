@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{%block head%}
+
+<title>View Artifacts</title>
+
+{%endblock%}
+
+
+{%block body%}
+    {% if "phishing_domain_detection" in result['parent_folder'] %}
+        <a href="/artifact/{{result['parent_folder']}}"><i class="fa fa-arrow-left py-4" aria-hidden="true"></i>Back</a>
+
+        <h4 style="text-align:center;">
+            {{result['parent_label']}}
+        </h4>
+    {% endif %}
+
+    <div class="row py-4">
+        {% for href,label in result["files"].items() %}
+            <div class="col-md-2 text-center">
+                <a href="/artifact/{{href}}" style="text-decoration: none;">
+                    <i class="fa {% if '.' in label %} fa-file {% else %} fa-folder {% endif %} fa-8x" aria-hidden="true"></i> <br>{{ label }}
+                    
+                    {% if '.' in label %}
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    {% endif %}
+
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+{%endblock%}
