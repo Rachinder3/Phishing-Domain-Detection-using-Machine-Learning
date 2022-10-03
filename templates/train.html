@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{%block head%}
+
+<title>Trigger new pipelines </title>
+
+{%endblock%}
+
+
+{%block body%}
+
+    <div class="row">
+        <div class="col-0"></div>
+        <div class="col-9 py-8">
+            <section class="text-gray-600 body-font">
+                <div class="container px-5 py-14 mx-auto">
+                    <div class="lg:w-2/3 flex flex-col sm:flex-row sm:items-center items-start mx-auto">
+                        <h3 class="flex-grow sm:pr-16 text-1xl font-medium title-font text-gray-900">You can trigger a new pipeline. Simply click the button.</h3>
+                    
+                        <form action =  "/train" method = "POST">
+                            <button class="flex-shrink-0 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg mt-10 sm:mt-0">Start</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <br>
+            <hr>
+            <br>
+
+            {% if context == None %}
+                <p></p>
+
+            {% elif context["state"] == 1 %}
+                <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                    <span class="font-medium">Success alert!</span> Pipeline has been triggered and should complete in some time.
+                </div>
+                <br>
+                <hr>
+                
+                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                {% for heading in context['experiment'].keys()%}
+                                <th scope="col" class="py-3 px-6">
+                                    {{heading}}
+                                </th>
+                               {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, values in context['experiment'].iterrows():%}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                {% for value in values %}
+                                <td class="py-4 px-6">
+                                    {{value}}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                        
+                       
+                    </table>
+                </div>
+
+
+
+            
+            {% elif context["state"] == 2%}
+                <div class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
+                    <span class="font-medium">Hey, it seems like pipeline is already running. Try again in some time once this pipeline finishes.</span>
+                </div>
+                <br>
+                <hr>
+                <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                {% for heading in context['experiment'].keys()%}
+                                <th scope="col" class="py-3 px-6">
+                                    {{heading}}
+                                </th>
+                               {% endfor %}
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for key, values in context['experiment'].iterrows():%}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                {% for value in values %}
+                                <td class="py-4 px-6">
+                                    {{value}}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            
+            
+            {% endif %}
+            
+
+            
+
+        </div>
+
+        <div class="col-0"></div>
+    
+    </div>
+
+
+{%endblock%}
