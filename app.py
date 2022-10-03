@@ -312,7 +312,45 @@ def update_model_config():
         exception = Phishing_Exception(e,sys)
         print(exception.error_message)
         
-    
+@app.route("/artifact", defaults = {'req_path': f"{pipeline_folder}"})
+@app.route("/artifact/<path:req_path>")
+def render_artifact_dir(req_path):
+    try:
+        os.makedirs(pipeline_folder,exist_ok=True)
+
+        print(f"req_path: {req_path}")
+        
+        abs_path = os.path.join(req_path)
+        print(abs_path)
+        
+        if not os.path.exists(abs_path):
+            return abort(404)
+        
+        if os.path.isfile(abs_path):
+            if ".html" in abs_path:
+                with open(abs_path, "r", encoding="utf-8") as file:
+                    content = ''
+                    for line in file.readlines():
+                        content = f"{content}{line}"
+                    return content
+            return send_file(abs_path)
+        
+        files = {os.path.join(abs_path, file_name): file_name for file_name in os.listdir(abs_path)[::-1] if
+             "artifact" in os.path.join(abs_path, file_name)}                       
+        
+        result = {
+        "files": files,
+        "parent_folder": os.path.dirname(abs_path),
+        "parent_label": abs_path
+        }
+        
+        return render_template("artifacts.html", result = result)
+        
+            
+    except Exception as e:
+        exception = Phishing_Exception(e,sys)
+        print(exception.error_message)
+
     
 if __name__=='__main__':
     app.run()
