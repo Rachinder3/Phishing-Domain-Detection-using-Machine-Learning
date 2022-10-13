@@ -43,10 +43,4 @@ We populate the config_entities with configuaration.yaml
 8. Combine all in pipeline
 
 
-dIFFERENce from Avnish:
-1) model factory -> get_initialized_model_list functions -> param_gid_search -> updating the code so that we we can skip grid search cv as well
-
-2) model factory -> execute grid search cv -> added scoring parameter, not in Avnish's code
-
-3) Added custom threshold to be used for prediction (use in prediction pipeline)
 
