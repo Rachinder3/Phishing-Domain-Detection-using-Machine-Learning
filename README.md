@@ -2,7 +2,7 @@
 The aim of this project is to detect phishing domains with the help of Machine Learning
 
 # Documentation
-![https://github.com/Rachinder3/Phishing-Domain-Detection-using-Machine-Learning/blob/main/documents/Phishing_deck.pdf] Deck for this project can be found here
+[ Deck for this project can be found here](https://github.com/Rachinder3/Phishing-Domain-Detection-using-Machine-Learning/blob/main/documents/Phishing_deck.pdf)
 
 # Jupyter notebbok
 ### Things to do:
