@@ -26,6 +26,3 @@ model_selection:
       - 10
       - 100
       - 200
-  module_2:
-    class: XGBRFClassifier
-    module: xgboost
