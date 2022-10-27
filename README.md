@@ -1,6 +1,11 @@
 # Phishing-Domain-Detection-using-Machine-Learning
 The aim of this project is to detect phishing domains with the help of Machine Learning
 
+# Documentation
+\begin{document}
+Deck for this project can be found here: \url{https://github.com/Rachinder3/Phishing-Domain-Detection-using-Machine-Learning/blob/main/documents/Phishing_deck.pdf}
+\end{document}
+
 # Jupyter notebbok
 ### Things to do:
  EDA: use pandas_profiling and self implementation of EDA. Ignoring pandas profiling as features are too many
