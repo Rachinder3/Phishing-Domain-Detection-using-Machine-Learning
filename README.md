@@ -3,7 +3,7 @@ The aim of this project is to detect phishing domains with the help of Machine L
 
 # Documentation
 \begin{document}
-Deck for this project can be found here: \url{https://github.com/Rachinder3/Phishing-Domain-Detection-using-Machine-Learning/blob/main/documents/Phishing_deck.pdf}
+Deck for this project can be found here: \url{/documents/Phishing_deck.pdf}
 \end{document}
 
 # Jupyter notebbok
